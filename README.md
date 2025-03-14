@@ -162,7 +162,16 @@ gcloud compute instances create nginx-vm \
   --network $VPC \
   --tags http-server \
   --image-family ubuntu-2204-lts \
-  --image-project ubuntu-os-cloud
+  --image-project ubuntu-os-cloud \
+  --metadata-from-file startup-script=<(cat << 'EOF'
+#!/bin/bash
+apt-get update
+apt-get install -y nginx
+echo "nginx hello world" > /var/www/html/index.html
+systemctl enable nginx
+systemctl restart nginx
+EOF
+)
 ```
 
 ### Update haproxy.cfg 
