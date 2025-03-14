@@ -1,0 +1,23 @@
+# Global settings
+global
+    log /run/haproxy/log local0
+    maxconn 4096
+    user haproxy
+    daemon
+
+# Default settings
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    timeout connect 5000
+    timeout client  50000
+    timeout server  50000
+
+# Frontend to handle incoming traffic
+frontend http_front
+    bind :$PORT  # Use $PORT for Cloud Run compatibility
+    mode http
+    # Redirect all requests to google.com
+    redirect prefix https://www.tesla.com code 302
